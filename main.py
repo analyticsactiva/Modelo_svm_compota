@@ -50,25 +50,26 @@ def asig_gse(gse):
         gse_4 = 1
     return gse_1,gse_2,gse_3,gse_4
 
-def CompHogar(comp_hogar):
+def CompHogar_mult(lista):
     f11_1 = 0
     f11_2 = 0
     f11_3 = 0
     f11_4 = 0
     f11_5 = 0
     f11_6 = 0
-    if(comp_hogar == CompHogar_txt[0]):
-        f11_1 = 1
-    elif(comp_hogar == CompHogar_txt[1]):
-        f11_2 = 1
-    elif(comp_hogar == CompHogar_txt[2]):
-        f11_3 = 1
-    elif(comp_hogar == CompHogar_txt[3]):
-        f11_4 = 1
-    elif(comp_hogar == CompHogar_txt[4]):
-        f11_5 = 1
-    else:
-        f11_6 = 1
+    for comp_hogar in lista:
+        if(comp_hogar == CompHogar_txt[0]):
+            f11_1 = 1
+        if(comp_hogar == CompHogar_txt[1]):
+            f11_2 = 1
+        if(comp_hogar == CompHogar_txt[2]):
+            f11_3 = 1
+        if(comp_hogar == CompHogar_txt[3]):
+            f11_4 = 1
+        if(comp_hogar == CompHogar_txt[4]):
+            f11_5 = 1
+        if(comp_hogar == CompHogar_txt[5]):
+            f11_6 = 1
     return f11_1,f11_2,f11_3,f11_4,f11_5,f11_6
 
 def res_p13(p13):
@@ -92,19 +93,20 @@ def res_p34(p34):
         p34_3 = 1
     return p34_1,p34_2,p34_3
 
-def res_p36(p36):
+def res_p36_mult(lista):
     p36_1 = 0
     p36_2 = 0
     p36_3 = 0
     p36_4 = 0
-    if(p36 == p36_txt[0]):
-        p36_1 = 1
-    elif(p36 == p36_txt[1]):
-        p36_2 = 1
-    elif(p36 == p36_txt[2]):
-        p36_3 = 1
-    else:
-        p36_4 = 1
+    for p36 in lista:
+        if(p36 == p36_txt[0]):
+            p36_1 = 1
+        if(p36 == p36_txt[1]):
+            p36_2 = 1
+        if(p36 == p36_txt[2]):
+            p36_3 = 1
+        if(p36 == p36_txt[3]):
+            p36_4 = 1
     return p36_1,p36_2,p36_3,p36_4
 
 def res_p35(p35):
@@ -127,10 +129,10 @@ def crear_reg(sexo,edad,gse,comp_hogar,p13,p34,p36,p35):
     sexo_1,sexo_2 = def_sexo(sexo)
     edad_1,edad_2,edad_3,edad_4 = rango_edad(edad)
     gse_1,gse_2,gse_3,gse_4 = asig_gse(gse)
-    f11_1,f11_2,f11_3,f11_4,f11_5,f11_6 = CompHogar(comp_hogar)
+    f11_1,f11_2,f11_3,f11_4,f11_5,f11_6 = CompHogar_mult(comp_hogar)
     p13_1,p13_2 = res_p13(p13)
     p34_1,p34_2,p34_3 = res_p34(p34)
-    p36_1,p36_2,p36_3,p36_4 = res_p36(p36)
+    p36_1,p36_2,p36_3,p36_4 = res_p36_mult(p36)
     p35_1,p35_2 = res_p35(p35)
 
     reg_array = [sexo_1,sexo_2,edad_1,edad_2,edad_3,edad_4,gse_1,gse_2,gse_3,gse_4,f11_1,f11_2,f11_3,f11_4,f11_5,f11_6,
@@ -149,10 +151,7 @@ def cluster_label(cluster):
     }
     return dic_cluster[cluster]
 
-# ---------------------------- Cargar Base ----------------------------------
-
-
-#scaler = StandardScaler()
+# ---------------------------- Cargar Modelo ----------------------------------
 
 with open('scaler.pkl','rb') as f:
     scaler = pickle.load(f)
@@ -161,10 +160,7 @@ with open('scaler.pkl','rb') as f:
 filename = 'finalized_model.sav'
 modelo_svm2 = pickle.load(open(filename, 'rb'))
 
-# Creación del modelo SVM lineal
-# ==============================================================================
-#modelo_svm2 = LinearSVC(penalty = 'l2', C = 100, random_state=123)
-#modelo_svm2.fit(X, y)
+# modelo SVM lineal
 
 def get_cluster(new_x):
     x_pred = scaler.transform(new_x)
@@ -180,17 +176,6 @@ def get_clusters(new_x):
 
     return pred
 
-def change_label_style(label, font_size='12px', font_color='black', font_family='sans-serif'):
-    html = f"""
-    <script>
-        var elems = window.parent.document.querySelectorAll('p');
-        var elem = Array.from(elems).find(x => x.innerText == '{label}');
-        elem.style.fontSize = '{font_size}';
-        elem.style.color = '{font_color}';
-        elem.style.fontFamily = '{font_family}';
-    </script>
-    """
-    st.components.v1.html(html)
 
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
@@ -232,7 +217,9 @@ if st.session_state["authentication_status"]:
 
     CompHogar_txt = ('Vive Solo', 'No vive solo','Vive con cónyuge','No vive con cónyuge','Vive con hijos','No vive con hijos')
 
-    comp_hogar = st.sidebar.selectbox('¿Con quién vive?',CompHogar_txt)
+    #comp_hogar = st.sidebar.selectbox('¿Con quién vive?',CompHogar_txt)
+
+    comp_hogar = st.sidebar.multiselect('¿Con quién vive?',CompHogar_txt)
 
     p13_txt = ('Reemplazo por snack procesados dulces','No reemplazo por snack procesados dulces')
 
@@ -244,7 +231,8 @@ if st.session_state["authentication_status"]:
 
     p36_txt = ('Controlar calorías','No controlar calorías','Un Consumo rápido y fácil','No consumo rápido y fácil')
 
-    p36 = st.sidebar.selectbox('Objetivo de consumo',p36_txt)
+    #p36 = st.sidebar.selectbox('Objetivo de consumo',p36_txt)
+    p36 = st.sidebar.multiselect('Objetivo de consumo',p36_txt)
 
     p35_txt = ('Totalmente dispuesto (5) a probar innovaciones saludables','1 a 4')
 
@@ -256,12 +244,9 @@ if st.session_state["authentication_status"]:
 
     # ---------------------------------------- Display Resultado ---------------------------------------------
 
-    #with st.spinner('Cargando...'):
-    #    time.sleep(10)
-    #st.success('¡Listo!')
-
     progress_text = "Cargando. Por favor espere."
     my_bar = st.progress(0, text=progress_text)
+
 
     for percent_complete in range(100):
         time.sleep(0.01)
@@ -275,9 +260,6 @@ if st.session_state["authentication_status"]:
 
     #st.subheader(cluster_label(new_cluster))
 
-    #st.text_input(new_cluster)
-    #change_label_style(new_cluster, '20px')
-
     st.sidebar.button("Ejecutar")
 
     on = st.toggle("Información del modelo")
@@ -285,11 +267,6 @@ if st.session_state["authentication_status"]:
     if on:
         st.write("Modelo: Maquina de Soporte Vectorial")
         st.write('Confiabilidad del modelo en el conjunto de entrenamiento: 84%')
-        #bbdd_inicial = df[x_columns][:10]
-        #with pd.ExcelWriter('BBDD_Cluster_Compotas.xlsx', engine = 'openpyxl', mode='a') as writer:   
-        #        bbdd_inicial.to_excel(writer, sheet_name='BBDD', engine = 'openpyxl',index = False)
-        #        writer.close()
-        #st.download_button(label="Descargar Base Inicial", data=bbdd_inicial, file_name = 'BBDD_Cluster_Compota.xlsx')
 
     # ------------------------ Cargar archivo ---------------------------------
 
@@ -312,27 +289,19 @@ if st.session_state["authentication_status"]:
 
         #st.write(uploaded_file)
 
-        with pd.ExcelWriter(uploaded_file, engine = 'openpyxl', mode='a') as writer:
+        #with pd.ExcelWriter(buffer, engine = 'openpyxl') as writer:
                 #writer.book = book
                 #writer.sheets = dict((ws.title, ws) for ws in book.worksheets)    
 
-                df_new.to_excel(writer, sheet_name='Cluster_Pred', engine = 'openpyxl',index = False)
-                writer.close()
+        #        df_new.to_excel(writer, sheet_name='Cluster_Pred', engine = 'openpyxl',index = False)
+        #        writer.close()
                 #book.save(uploaded_file)
                 #book.close()
-        st.download_button(label="Descargar", data=uploaded_file, file_name = 'Cluster.xlsx') #uploaded_file.name)
+        output_file = df_new.to_csv(index=False).encode('utf-8')
+        st.download_button("Descargar", output_file,'Cluster.csv') #uploaded_file.name)
 
 elif st.session_state["authentication_status"] == False:
     st.error('Usuario/Contraseña incorrecta')
 elif st.session_state["authentication_status"] == None:
     st.warning('Por favor ingrese su usuario y contraseña')
-
-
-
-
-
-
-
-
-
 
