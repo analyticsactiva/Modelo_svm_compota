@@ -72,6 +72,33 @@ def CompHogar_mult(lista):
             f11_6 = 1
     return f11_1,f11_2,f11_3,f11_4,f11_5,f11_6
 
+def comp_hogar_a(f11_a):
+    f11_1 = 0
+    f11_2 = 0
+    if(f11_1 == CompHogar_txt[0]):
+        f11_1 = 1
+    else:
+        f11_2 = 1
+    return f11_1,f11_2
+
+def comp_hogar_b(f11_b):
+    f11_3 = 0
+    f11_4 = 0
+    if(f11_3 == CompHogar_txt[2]):
+        f11_3 = 1
+    else:
+        f11_4 = 1
+    return f11_3,f11_4
+
+def comp_hogar_c(f11_c):
+    f11_5 = 0
+    f11_6 = 0
+    if(f11_5 == CompHogar_txt[4]):
+        f11_5 = 1
+    else:
+        f11_6 = 1
+    return f11_5,f11_6
+
 def res_p13(p13):
     p13_1 = 0
     p13_2 = 0
@@ -109,6 +136,24 @@ def res_p36_mult(lista):
             p36_4 = 1
     return p36_1,p36_2,p36_3,p36_4
 
+def res_p36_a(p36_a):
+    p36_1 = 0
+    p36_2 = 0
+    if(p36_a == p36_txt[0]):
+        p36_1 = 1
+    else:
+        p36_2 = 1
+    return p36_1,p36_2
+
+def res_p36_b(p36_b):
+    p36_3 = 0
+    p36_4 = 0
+    if(p36_b == p36_txt[2]):
+        p36_3 = 1
+    else:
+        p36_4 = 1
+    return p36_3,p36_4
+
 def res_p35(p35):
     p35_1 = 0
     p35_2 = 0
@@ -124,15 +169,20 @@ x_columns = ['SEXO_1','SEXO_2','RANGOEDAD_1','RANGOEDAD_2','RANGOEDAD_3','RANGOE
              'P13_2', 'P34_0_1', 'P34_0_2', 'P34_0_3', 'P36_A_1', 'P36_A_2',
              'P36_A_3', 'P36_A_4', 'P35_0_1', 'P35_0_2']
 
-def crear_reg(sexo,edad,gse,comp_hogar,p13,p34,p36,p35):
+def crear_reg(sexo,edad,gse,f11_a,f11_b,f11_c,p13,p34,p36_a,p36_b,p35):
 
     sexo_1,sexo_2 = def_sexo(sexo)
     edad_1,edad_2,edad_3,edad_4 = rango_edad(edad)
     gse_1,gse_2,gse_3,gse_4 = asig_gse(gse)
-    f11_1,f11_2,f11_3,f11_4,f11_5,f11_6 = CompHogar_mult(comp_hogar)
+    #f11_1,f11_2,f11_3,f11_4,f11_5,f11_6 = CompHogar_mult(comp_hogar)
+    f11_1,f11_2 = comp_hogar_a(f11_a)
+    f11_3,f11_4 = comp_hogar_b(f11_b)
+    f11_5,f11_6 = comp_hogar_c(f11_c)
     p13_1,p13_2 = res_p13(p13)
     p34_1,p34_2,p34_3 = res_p34(p34)
-    p36_1,p36_2,p36_3,p36_4 = res_p36_mult(p36)
+    #p36_1,p36_2,p36_3,p36_4 = res_p36_mult(p36)
+    p36_1,p36_2 = res_p36_a(p36_a)
+    p36_3,p36_4 = res_p36_b(p36_b)
     p35_1,p35_2 = res_p35(p35)
 
     reg_array = [sexo_1,sexo_2,edad_1,edad_2,edad_3,edad_4,gse_1,gse_2,gse_3,gse_4,f11_1,f11_2,f11_3,f11_4,f11_5,f11_6,
@@ -150,6 +200,16 @@ def cluster_label(cluster):
         5: 'Tradicional Saludable'
     }
     return dic_cluster[cluster]
+
+def cluster_desc(cluster):
+    dic_desc_cluster = {
+        1: '28%'+' de la población. \n Madres jóvenes que hacen rendir su presupuesto. La alimentación es práctica, se debe adaptar a una vida con poco tiempo y muchas cosas, y a su vez enfocarla en los más pequeños.',
+        2: '24%'+' de la población. \n Jóvenes que viven solos o en pareja. Disfrutan de la vida y dedican tiempo al deporte y vida saludable. La alimentación debe ser práctica, saludable y para disfrute, y en todo momento o lugar.',
+        3: '14%'+' de la población. \n Mujeres con hijos ya adultos. Realizan deporte y privilegian la alimentación saludable y respetuosa, que además tenga bajo aporte en calorías. Abiertas a la innovación y tendencias en alimentación. ',
+        4: '19%'+' de la Población. \n Hombres, que impulsan una vida y alimentación saludable para ellos y su familia, con marcas de confianza y respetuosas del entorno, y mejor si se adaptan a una vida rápida.',
+        5: '16%'+' de la población. \n Viven solos o en hogares pequeños, con un buen presupuesto familiar. Buscan el disfrute, relajarse y lo práctico a la hora de alimentarse, y si es algo sano, que aporta a la salud, mejor aún.'
+    }
+    return dic_desc_cluster[cluster]
 
 # ---------------------------- Cargar Modelo ----------------------------------
 
@@ -193,13 +253,18 @@ authenticator = stauth.Authenticate(
 name, authentication_status, username = authenticator.login('main', fields = {'Form name': 'Activa Research'})
 
 
-
 if st.session_state["authentication_status"]:
-    authenticator.logout('Logout', 'main')
+
+    cols = st.columns(4)
+
+    # the 3rd column
+    with cols[3]:
+        authenticator.logout("Logout", "main")
+    #authenticator.logout('Logout', 'main')
     #st.write(f'Bienvenido *{st.session_state["name"]}*')
     #st.title('Some content')
 
-    st.image('logo-activa.svg',width=500)
+    st.image('logo-activa.svg',width=100)
     # --------------------- Display Barra Lateral -----------------------------------
 
     
@@ -219,26 +284,35 @@ if st.session_state["authentication_status"]:
 
     #comp_hogar = st.sidebar.selectbox('¿Con quién vive?',CompHogar_txt)
 
-    comp_hogar = st.sidebar.multiselect('¿Con quién vive?',CompHogar_txt)
+    #comp_hogar = st.sidebar.multiselect('¿Con quién vive?',CompHogar_txt)
+
+    f11_a = st.sidebar.selectbox('¿Vive solo?', CompHogar_txt[:2])
+
+    f11_b = st.sidebar.selectbox('¿Vive con cónyuge?', CompHogar_txt[2:4])
+
+    f11_c = st.sidebar.selectbox('¿Vive con hijos?', CompHogar_txt[4:])
 
     p13_txt = ('Reemplazo por snack procesados dulces','No reemplazo por snack procesados dulces')
 
-    p13 = st.sidebar.selectbox('¿Reemplaza snack?',p13_txt)
+    p13 = st.sidebar.selectbox('¿Reemplaza compota?',p13_txt)
 
-    p34_txt = ('Hogar de hábitos Saludables','Hogar de hábitos Regular','Hogar de hábitos No saludables')
+    p34_txt = ('Hogar de hábitos Saludables (6-7)','Hogar de hábitos Regular (5)','Hogar de hábitos No saludables (1-4)')
 
-    p34 = st.sidebar.selectbox('Hábitos del Hogar',p34_txt)
+    p34 = st.sidebar.selectbox('Hábitos alimenticios del hogar',p34_txt)
 
     p36_txt = ('Controlar calorías','No controlar calorías','Un Consumo rápido y fácil','No consumo rápido y fácil')
 
     #p36 = st.sidebar.selectbox('Objetivo de consumo',p36_txt)
-    p36 = st.sidebar.multiselect('Objetivo de consumo',p36_txt)
+    #p36 = st.sidebar.multiselect('Objetivo de consumo',p36_txt)
 
-    p35_txt = ('Totalmente dispuesto (5) a probar innovaciones saludables','1 a 4')
+    p36_a = st.sidebar.selectbox('Consume para controlar calorías',p36_txt[:2])
+    p36_b = st.sidebar.selectbox('Consumo práctico',p36_txt[2:])
+
+    p35_txt = ('Totalmente dispuesto (5) a probar innovaciones saludables','No está totalmente dispuesto a probar innovaciones saludables (1 a 4)')
 
     p35 = st.sidebar.selectbox('Disposición a probar innovaciones saludables',p35_txt)
 
-    new_x = crear_reg(sexo,edad,gse,comp_hogar,p13,p34,p36,p35)
+    new_x = crear_reg(sexo,edad,gse,f11_a,f11_b,f11_c,p13,p34,p36_a,p36_b,p35)
 
     new_cluster = get_cluster(new_x)
 
@@ -260,32 +334,34 @@ if st.session_state["authentication_status"]:
 
     #st.subheader(cluster_label(new_cluster))
 
+    st.subheader(cluster_desc(new_cluster))
+
     st.sidebar.button("Ejecutar")
 
-    on = st.toggle("Información del modelo")
+    #on = st.toggle("Información del modelo")
 
-    if on:
-        st.write("Modelo: Maquina de Soporte Vectorial")
-        st.write('Confiabilidad del modelo en el conjunto de entrenamiento: 84%')
+    #if on:
+    #    st.write("Modelo: Maquina de Soporte Vectorial")
+    #    st.write('Confiabilidad del modelo en el conjunto de entrenamiento: 84%')
 
     # ------------------------ Cargar archivo ---------------------------------
 
-    uploaded_file = st.file_uploader("Elegir Archivo", type = 'xlsx')
-    if uploaded_file is not None:
-        df = pd.read_excel(uploaded_file)
+    #uploaded_file = st.file_uploader("Elegir Archivo", type = 'xlsx')
+    #if uploaded_file is not None:
+        #df = pd.read_excel(uploaded_file)
         #st.dataframe(df1)
 
-        book = load_workbook(uploaded_file)
+        #book = load_workbook(uploaded_file)
 
-        pred_clusters = pd.DataFrame(get_clusters(df[x_columns]))
-        pred_clusters.rename(columns={0:'Cluster'},inplace=True)
-        pred_clusters['Etiqueta_Cluster'] = pred_clusters.Cluster.apply(cluster_label)
+        #pred_clusters = pd.DataFrame(get_clusters(df[x_columns]))
+        #pred_clusters.rename(columns={0:'Cluster'},inplace=True)
+        #pred_clusters['Etiqueta_Cluster'] = pred_clusters.Cluster.apply(cluster_label)
 
         #pred_clusters.reset_index(inplace = True)
 
         #pred_clusters.set_index(df.index)
 
-        df_new = pd.concat([df,pred_clusters],axis=1)
+        #df_new = pd.concat([df,pred_clusters],axis=1)
 
         #st.write(uploaded_file)
 
@@ -297,11 +373,15 @@ if st.session_state["authentication_status"]:
         #        writer.close()
                 #book.save(uploaded_file)
                 #book.close()
-        output_file = df_new.to_csv(index=False).encode('utf-8')
-        st.download_button("Descargar", output_file,'Cluster.csv') #uploaded_file.name)
+        #output_file = df_new.to_csv(index=False).encode('utf-8')
+        #st.download_button("Descargar", output_file,'Cluster.csv') #uploaded_file.name)
+    #st.write("")
+    
+    #with cols[3]:
+    
+    #st.image('logo-activa.svg',width=100)
 
 elif st.session_state["authentication_status"] == False:
     st.error('Usuario/Contraseña incorrecta')
 elif st.session_state["authentication_status"] == None:
     st.warning('Por favor ingrese su usuario y contraseña')
-
