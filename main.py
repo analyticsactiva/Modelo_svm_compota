@@ -75,7 +75,7 @@ def CompHogar_mult(lista):
 def comp_hogar_a(f11_a):
     f11_1 = 0
     f11_2 = 0
-    if(f11_1 == CompHogar_txt[0]):
+    if(f11_1 == CompHogar_txt[1]):
         f11_1 = 1
     else:
         f11_2 = 1
@@ -280,7 +280,7 @@ if st.session_state["authentication_status"]:
 
     gse = st.sidebar.selectbox('Grupo socioeconómico',GSE_txt)
 
-    CompHogar_txt = ('Vive Solo', 'No vive solo','Vive con cónyuge','No vive con cónyuge','Vive con hijos','No vive con hijos')
+    CompHogar_txt = ('No vive solo','Vive Solo','Vive con cónyuge','No vive con cónyuge','Vive con hijos','No vive con hijos')
 
     #comp_hogar = st.sidebar.selectbox('¿Con quién vive?',CompHogar_txt)
 
