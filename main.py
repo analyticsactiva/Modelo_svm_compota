@@ -346,35 +346,36 @@ if st.session_state["authentication_status"]:
 
     # ------------------------ Cargar archivo ---------------------------------
 
-    #uploaded_file = st.file_uploader("Elegir Archivo", type = 'xlsx')
-    #if uploaded_file is not None:
-        #df = pd.read_excel(uploaded_file)
+    uploaded_file = st.file_uploader("Elegir Archivo", type = 'xlsx')
+    if uploaded_file is not None:
+        df = pd.read_excel(uploaded_file)
         #st.dataframe(df1)
 
-        #book = load_workbook(uploaded_file)
+        book = load_workbook(uploaded_file)
 
-        #pred_clusters = pd.DataFrame(get_clusters(df[x_columns]))
-        #pred_clusters.rename(columns={0:'Cluster'},inplace=True)
-        #pred_clusters['Etiqueta_Cluster'] = pred_clusters.Cluster.apply(cluster_label)
+        pred_clusters = pd.DataFrame(get_clusters(df[x_columns]))
+        pred_clusters.rename(columns={0:'Cluster'},inplace=True)
+        pred_clusters['Etiqueta_Cluster'] = pred_clusters.Cluster.apply(cluster_label)
 
-        #pred_clusters.reset_index(inplace = True)
+        pred_clusters.reset_index(inplace = True)
 
-        #pred_clusters.set_index(df.index)
+        pred_clusters.set_index(df.index)
 
-        #df_new = pd.concat([df,pred_clusters],axis=1)
+        df_new = pd.concat([df,pred_clusters],axis=1)
 
         #st.write(uploaded_file)
 
-        #with pd.ExcelWriter(buffer, engine = 'openpyxl') as writer:
+        #with pd.ExcelWriter(uploaded_file, engine = 'openpyxl') as writer:
                 #writer.book = book
                 #writer.sheets = dict((ws.title, ws) for ws in book.worksheets)    
 
-        #        df_new.to_excel(writer, sheet_name='Cluster_Pred', engine = 'openpyxl',index = False)
-        #        writer.close()
+                #df_new.to_excel(writer, sheet_name='Cluster_Pred', engine = 'openpyxl',index = False)
+                #writer.close()
                 #book.save(uploaded_file)
                 #book.close()
-        #output_file = df_new.to_csv(index=False).encode('utf-8')
-        #st.download_button("Descargar", output_file,'Cluster.csv') #uploaded_file.name)
+        #output_file = df_new.to_excel(index=False, sheet_name='Cluster_Pred', engine='openpyxl')
+        output_file = df_new.to_csv(index=False).encode('utf-8')
+        st.download_button("Descargar", output_file,'Cluster.csv') #uploaded_file.name)
     #st.write("")
     
     #with cols[3]:
