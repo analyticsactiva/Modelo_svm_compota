@@ -373,9 +373,9 @@ if st.session_state["authentication_status"]:
                 #writer.close()
                 #book.save(uploaded_file)
                 #book.close()
-        #output_file = df_new.to_excel(index=False, sheet_name='Cluster_Pred', engine='openpyxl')
-        output_file = df_new.to_csv(index=False).encode('utf-8')
-        st.download_button("Descargar", output_file,'Cluster.csv') #uploaded_file.name)
+        output_file = df_new.to_excel(index=False, sheet_name='Cluster_Pred', engine='openpyxl')
+        #output_file = df_new.to_csv(index=False).encode('utf-8')
+        st.download_button("Descargar", output_file,'Cluster.xlsx') #uploaded_file.name)
     #st.write("")
     
     #with cols[3]:
