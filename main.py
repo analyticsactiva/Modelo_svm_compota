@@ -6,10 +6,24 @@ import streamlit as st
 import streamlit_authenticator as stauth
 from streamlit_authenticator.utilities.hasher import Hasher
 from openpyxl import load_workbook
+from io import BytesIO
+from pyxlsb import open_workbook as openxlsb
 import yaml
 from yaml.loader import SafeLoader
 
 # ----------------------------- Definición de variables -------------------------------------
+
+def to_excel(df):
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, index=False, sheet_name='Sheet1')
+    workbook = writer.book
+    worksheet = writer.sheets['Sheet1']
+    format1 = workbook.add_format({'num_format': '0.00'}) 
+    worksheet.set_column('A:A', None, format1)  
+    writer.save()
+    processed_data = output.getvalue()
+    return processed_data
 
 def def_sexo(sexo):
     sexo_1 = 0
@@ -373,7 +387,8 @@ if st.session_state["authentication_status"]:
                 #writer.close()
                 #book.save(uploaded_file)
                 #book.close()
-        output_file = df_new.to_excel(index=False, sheet_name='Cluster_Pred', engine='openpyxl')
+        output_file = to_excel(new_df)
+        #output_file = df_new.to_excel(index=False, sheet_name='Cluster_Pred', engine='openpyxl')
         #output_file = df_new.to_csv(index=False).encode('utf-8')
         st.download_button("Descargar", output_file,'Cluster.xlsx') #uploaded_file.name)
     #st.write("")
