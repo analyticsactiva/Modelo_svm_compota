@@ -284,15 +284,15 @@ if st.session_state["authentication_status"]:
     
     Sexo_txt = ('Hombre','Mujer')
 
-    sexo = st.sidebar.selectbox('Sexo',Sexo_txt)
+    #sexo = st.sidebar.selectbox('Sexo',Sexo_txt)
 
     Edad_txt = ('15 a 17 años','18 a 35 años','36 a 55 años','56 a 80 años')
 
-    edad = st.sidebar.selectbox('Rango Edad',Edad_txt)
+    #edad = st.sidebar.selectbox('Rango Edad',Edad_txt)
 
     GSE_txt = ('ABC1','C2','C3','D')
 
-    gse = st.sidebar.selectbox('Grupo socioeconómico',GSE_txt)
+    #gse = st.sidebar.selectbox('Grupo socioeconómico',GSE_txt)
 
     CompHogar_txt = ('No vive solo','Vive Solo','Vive con cónyuge','No vive con cónyuge','Vive con hijos','No vive con hijos')
 
@@ -300,57 +300,57 @@ if st.session_state["authentication_status"]:
 
     #comp_hogar = st.sidebar.multiselect('¿Con quién vive?',CompHogar_txt)
 
-    f11_a = st.sidebar.selectbox('¿Vive solo?', CompHogar_txt[:2])
+    #f11_a = st.sidebar.selectbox('¿Vive solo?', CompHogar_txt[:2])
 
-    f11_b = st.sidebar.selectbox('¿Vive con cónyuge?', CompHogar_txt[2:4])
+    #f11_b = st.sidebar.selectbox('¿Vive con cónyuge?', CompHogar_txt[2:4])
 
-    f11_c = st.sidebar.selectbox('¿Vive con hijos?', CompHogar_txt[4:])
+    #f11_c = st.sidebar.selectbox('¿Vive con hijos?', CompHogar_txt[4:])
 
     p13_txt = ('Reemplazo por snack procesados dulces','No reemplazo por snack procesados dulces')
 
-    p13 = st.sidebar.selectbox('¿Reemplaza compota?',p13_txt)
+    #p13 = st.sidebar.selectbox('¿Reemplaza compota?',p13_txt)
 
     p34_txt = ('Hogar de hábitos Saludables (6-7)','Hogar de hábitos Regular (5)','Hogar de hábitos No saludables (1-4)')
 
-    p34 = st.sidebar.selectbox('Hábitos alimenticios del hogar',p34_txt)
+    #p34 = st.sidebar.selectbox('Hábitos alimenticios del hogar',p34_txt)
 
     p36_txt = ('Controlar calorías','No controlar calorías','Un Consumo rápido y fácil','No consumo rápido y fácil')
 
     #p36 = st.sidebar.selectbox('Objetivo de consumo',p36_txt)
     #p36 = st.sidebar.multiselect('Objetivo de consumo',p36_txt)
 
-    p36_a = st.sidebar.selectbox('Consume para controlar calorías',p36_txt[:2])
-    p36_b = st.sidebar.selectbox('Consumo práctico',p36_txt[2:])
+    #p36_a = st.sidebar.selectbox('Consume para controlar calorías',p36_txt[:2])
+    #p36_b = st.sidebar.selectbox('Consumo práctico',p36_txt[2:])
 
     p35_txt = ('Totalmente dispuesto (5) a probar innovaciones saludables','No está totalmente dispuesto a probar innovaciones saludables (1 a 4)')
 
-    p35 = st.sidebar.selectbox('Disposición a probar innovaciones saludables',p35_txt)
+    #p35 = st.sidebar.selectbox('Disposición a probar innovaciones saludables',p35_txt)
 
-    new_x = crear_reg(sexo,edad,gse,f11_a,f11_b,f11_c,p13,p34,p36_a,p36_b,p35)
+    #new_x = crear_reg(sexo,edad,gse,f11_a,f11_b,f11_c,p13,p34,p36_a,p36_b,p35)
 
-    new_cluster = get_cluster(new_x)
+    #new_cluster = get_cluster(new_x)
 
     # ---------------------------------------- Display Resultado ---------------------------------------------
 
-    progress_text = "Cargando. Por favor espere."
-    my_bar = st.progress(0, text=progress_text)
+    #progress_text = "Cargando. Por favor espere."
+    #my_bar = st.progress(0, text=progress_text)
 
 
-    for percent_complete in range(100):
-        time.sleep(0.01)
-        my_bar.progress(percent_complete + 1, text=progress_text)
-    time.sleep(1)
-    my_bar.empty()
+    #for percent_complete in range(100):
+    #    time.sleep(0.01)
+    #    my_bar.progress(percent_complete + 1, text=progress_text)
+    #time.sleep(1)
+    #my_bar.empty()
 
 
     #st.markdown('Cluster: ')
-    st.title(f'Cluster Compota: {cluster_label(new_cluster)}')
+    #st.title(f'Cluster Compota: {cluster_label(new_cluster)}')
 
     #st.subheader(cluster_label(new_cluster))
 
-    st.subheader(cluster_desc(new_cluster))
+    #st.subheader(cluster_desc(new_cluster))
 
-    st.sidebar.button("Ejecutar")
+    #st.sidebar.button("Ejecutar")
 
     #on = st.toggle("Información del modelo")
 
